@@ -1,7 +1,7 @@
 # Yolk: Plan
 
-Stand: Mo 09.11.2026 abends, nach technischer Prüfung durch zwei unabhängige Recherchen. **Status: wartet auf Garys
-Go und auf die Wahl des macOS-Wegs.** Vorher wird nichts gebaut.
+Stand: Mo 09.11.2026 abends. **Status: Go von Gary am 09.11.2026.** Gebaut wird auf Garys MacBook, los geht es mit
+Meilenstein 1.
 
 ## Ziel
 
@@ -15,12 +15,12 @@ Rechts wischen heißt behalten, links wischen heißt löschen. Schwerpunkt sind 
 |---|---|---|
 | Q1 | Geräte | Nur iPhone |
 | Q2 | Wer nutzt die App | Erst nur Gary, App Store vielleicht später. Deshalb so sauber bauen, dass ein späterer Start ohne Umbau geht |
-| Q3 | Apple-Konto | Kein Bezahlkonto. Kostenlose Apple-ID, gebaut wird mit Xcode auf dem Mac mini |
+| Q3 | Apple-Konto | Kein Bezahlkonto. Kostenlose Apple-ID, gebaut wird auf Garys MacBook |
 | Q4 | Wann wird gelöscht | Sammeln: Links-Wischer landen im App-Papierkorb, am Ende einmal prüfen und einmal bestätigen |
 | Q5 | Modi | Screenshots, ähnliche Fotos und Serien, Videos (größte zuerst), alle Fotos chronologisch, nach Monat oder Jahr |
 | Q6 | Extras | Rückgängig, nach oben = Favorit, nach unten = später, Zähler für freigeräumten Speicher |
 | Q7 | Grundton | Hell |
-| Q8 | Platz für Xcode | Gary bekommt eine Liste der größten Brocken und gibt frei, was weg darf. Dann Xcode mit Simulator |
+| Q8 | Platz für Xcode | Erledigt: Platz auf dem Mac mini geschaffen. Seit dem Wechsel aufs MacBook nicht mehr nötig |
 | Q9 | Erneuerung alle 7 Tage | Über WLAN, Erinnerung nach 6 Tagen |
 | Q10 | Design | Entwurf A im Stil von phia.com, nachgeschärft am 09.11.: Royalblau statt Marineblau, kaum Gelb, insgesamt ruhiger |
 | Q11 | Name | Yolk |
@@ -106,26 +106,21 @@ ruhige Bildkacheln und schlichte, runde Knöpfe. Logo, Texte und Bilder von Phia
 
 ## Bauweg ohne Kosten
 
-Auf dem Mac mini ist am 09.11. kein Xcode installiert, und er läuft mit macOS Sequoia 15.5. Laut Apple
-(developer.apple.com/support/xcode) braucht Xcode 26.0–26.3 macOS 15.6 oder neuer. Das aktuelle Xcode 27.x aus dem
-App Store braucht macOS Tahoe 26.6 oder neuer. Für ein iPhone mit iOS 26 reichen beide. Deshalb gibt es zwei Wege:
-
-- **Weg B (empfohlen):** bei Sequoia bleiben, nur auf die neueste 15.x-Version aktualisieren und **Xcode 26.3** von
-  developer.apple.com/download/all laden (kostenlose Apple-ID reicht). Das ist die kleinste Änderung am Mac mini, auf
-  dem viele andere Dienste laufen.
-- **Weg A:** auf macOS Tahoe 26.6 oder neuer aktualisieren und **Xcode 27** aus dem App Store holen. Das ist
-  zukunftssicherer (zum Beispiel für iOS 27), aber ein großes System-Update für den ganzen Mac.
+Gebaut wird auf **Garys MacBook Air** (Apple M4, macOS 26.6.2, Xcode 27.2, Simulatoren für iOS 18.5 und 26.4),
+nicht auf dem Mac mini. Der Mac mini ist der Heimserver und dafür nicht gedacht (Entscheidung Gary, 09.11.). Der
+Agent arbeitet vom Mac mini aus: Der Code liegt im Repo, gebaut und installiert wird per SSH auf dem MacBook. Ein
+Apple-Development-Zertifikat ist dort bereits eingerichtet.
 
 | Schritt | Wer | Was |
 |---|---|---|
-| 0 | Agent | Platz schaffen. **Erledigt am 09.11.:** 22,4 GB alte Aufgaben-Ordner und kleine Caches gelöscht, von Gary freigegeben |
-| 1 | Gary | macOS-Update nach gewähltem Weg. Neustart nötig, die Dienste auf dem Mac sind kurz weg |
-| 2 | Gary | Xcode laden und einmal öffnen. Unter *Einstellungen → Apple Accounts* (in 26.x: *Accounts*) die Apple-ID eintragen. Wichtig: im macOS-Benutzer `agent` angemeldet, denn die Anmeldung gilt nur für diesen Benutzer |
-| 3 | Gary | iPhone per Kabel an den Mac, „Diesem Computer vertrauen“ tippen. Nach dem Koppeln erscheint der Entwicklermodus (*Einstellungen → Datenschutz & Sicherheit*): einschalten, neu starten, bestätigen |
-| 4 | Agent | Erster Build aufs iPhone. Bei der Frage, ob `codesign` den Schlüssel nutzen darf, einmal „Immer erlauben“ (Gary am Mac) |
-| 5 | Gary | Auf dem iPhone *Einstellungen → Allgemein → VPN & Geräteverwaltung → Entwickler-App → Vertrauen*. Braucht Internet |
-| 6 | Agent | Ab jetzt bauen, im Simulator testen, Bildschirmfotos zeigen und per WLAN aufs iPhone spielen |
-| 7 | Agent | Nach 6 Tagen erinnern und neu aufspielen. iPhone zu Hause, entsperrt, im selben WLAN. Vorher die App-Daten per `devicectl` sichern und danach prüfen, ob das neue Profil wirklich 7 neue Tage hat |
+| 1 | Gary | Xcode auf dem MacBook einmal öffnen und die Zusatzkomponenten installieren lassen (fragt nach dem Mac-Passwort). Ohne das klappt das Installieren aufs iPhone aus dem Terminal nicht |
+| 2 | Gary | In Xcode unter *Einstellungen → Apple Accounts* prüfen, ob die Apple-ID angemeldet ist |
+| 3 | Gary | Das MacBook in T3 als Geräte-Host (SSH) eintragen, damit der Simulator im Geräte-Fenster von T3 erscheint |
+| 4 | Gary | iPhone per Kabel ans MacBook, „Diesem Computer vertrauen“ tippen. Nach dem Koppeln erscheint der Entwicklermodus (*Einstellungen → Datenschutz & Sicherheit*): einschalten, neu starten, bestätigen |
+| 5 | Agent | Erster Build aufs iPhone. Fragt der Mac, ob `codesign` den Schlüssel nutzen darf, einmal „Immer erlauben“ (Gary am MacBook) |
+| 6 | Gary | Auf dem iPhone *Einstellungen → Allgemein → VPN & Geräteverwaltung → Entwickler-App → Vertrauen*. Braucht Internet |
+| 7 | Agent | Ab jetzt bauen, im Simulator auf dem MacBook testen, Bildschirmfotos zeigen und aufs iPhone spielen |
+| 8 | Agent | Nach 6 Tagen erinnern und neu aufspielen. MacBook an, iPhone entsperrt im selben WLAN. Vorher die App-Daten per `devicectl` sichern und danach prüfen, ob das neue Profil wirklich 7 neue Tage hat |
 
 Grenzen der kostenlosen Apple-ID: Profile gelten je 7 Tage. Höchstens 3 Geräte und 3 eigene Apps pro Gerät, höchstens
 10 App-IDs in 7 Tagen. Es gibt kein TestFlight, keine iCloud-Synchronisation und keine Push-Mitteilungen. Für Yolk
@@ -145,18 +140,13 @@ Jeder Meilenstein endet mit einem Test auf Garys echtem iPhone, nicht nur im Sim
 
 ## Risiken und was zuerst geprüft wird
 
-- **Platz auf dem Mac:** 22,4 GB sind gelöscht. Frei werden sie erst, wenn macOS den lokalen Time-Machine-
-  Schnappschuss vom 09.11. 19:10 entfernt. Das passiert von selbst innerhalb eines Tages oder sobald Platz gebraucht
-  wird. Xcode mit iPhone-Unterstützung und Zwischenspeichern braucht 25–30 GB. Die iPhone-Laufzeit (rund 8 GB) ist
-  auch für Builds aufs Gerät nötig.
-- **macOS-Version:** siehe die zwei Wege oben. Xcode 26.3 bringt die iOS-26.2-Werkzeuge mit. Ob es auch auf ein
-  iPhone mit einer neueren 26.x-Version installiert, zeigt der erste Test. Ein Update des iPhones auf iOS 27 könnte
-  später doch Weg A erzwingen.
+- **Bauen per SSH:** Simulator-Builds brauchen keine Signatur und gehen per SSH. Fürs iPhone kann das Signieren
+  über SSH scheitern (abgelaufene Anmeldung, gesperrter Schlüsselbund). Dann reicht es, wenn Gary in Xcode einmal auf
+  „Ausführen“ klickt. Das wird beim ersten iPhone-Build geklärt.
+- **Neuere Werkzeuge:** Xcode 27.2 bringt die iOS-27-Werkzeuge mit. Das offizielle Größenfeld `dataSize` nutzt Yolk
+  deshalb auf iOS 27 und fällt auf iOS 18–26 auf das alte Feld zurück.
 - **WLAN-Installation:** Das WLAN muss IPv6 können, und nach jedem iOS-Update muss das iPhone neu gekoppelt werden.
-  VPNs wie Tailscale (läuft auf dem Mac mini) können die Verbindung stören. Notfalls geht es per Kabel.
-- **Signieren ohne Xcode-Fenster:** `xcodebuild -allowProvisioningUpdates` erneuert Profile mit der in Xcode
-  gespeicherten Anmeldung. Das klappt nur in der angemeldeten Sitzung, nicht über ssh. Läuft die Anmeldung ab, muss
-  Gary sich in Xcode neu anmelden. Das wird gleich zu Beginn einmal getestet.
+  VPNs wie Tailscale können die Verbindung zwischen MacBook und iPhone stören. Notfalls geht es per Kabel.
 - **Löschen hängt:** Apple bestätigt einen Fehler (iOS 18.6 bis 27), bei dem das Löschen nie fertig wird, oft bei
   48-MP-ProRAW-Fotos. Yolk braucht deshalb eine Zeitgrenze, eine verständliche Meldung und einen Weg, es erneut zu
   versuchen.
