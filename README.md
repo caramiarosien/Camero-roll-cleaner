@@ -12,4 +12,7 @@ Design: hell und ruhig, elegante Serifen-Überschriften, Royalblau als einzige F
 
 ## Status
 
-Planungsphase, siehe [docs/PLAN.md](docs/PLAN.md). Gebaut wird erst, wenn der Plan freigegeben ist.
+Meilenstein 1 ist programmiert und kompiliert, aber noch nicht auf dem Gerät getestet.
+
+- [docs/BRIEFING.md](docs/BRIEFING.md): Einstieg für die Weiterarbeit (Stand, erste Schritte, Dateikarte)
+- [docs/PLAN.md](docs/PLAN.md): alle Entscheidungen, Design, Technik, Risiken und Meilensteine
