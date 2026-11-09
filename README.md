@@ -1,15 +1,15 @@
-# Camera Roll Cleaner
+# Yolk
 
-Eine App, mit der man die eigene Camera Roll im Tinder-Stil aufräumt:
+Eine iPhone-App, mit der man die eigene Mediathek im Tinder-Stil aufräumt:
 
 - **Nach rechts wischen:** Foto behalten
-- **Nach links wischen:** Foto in den Papierkorb ("Zuletzt gelöscht") verschieben
+- **Nach links wischen:** Foto in den Papierkorb der App, am Ende einmal gesammelt löschen
 
-Ziel ist, den Cloud-Speicher spürbar zu entlasten, vor allem durch alte Screenshots
-und sehr ähnliche Fotos.
+Ziel ist, den iCloud-Speicher spürbar zu entlasten, vor allem durch alte Screenshots,
+sehr ähnliche Fotos und große Videos.
 
-Design: schlicht und modern, in Eigelb und Marineblau.
+Design: hell und ruhig, elegante Serifen-Überschriften, Royalblau als einzige Farbe.
 
 ## Status
 
-Planungsphase. Gebaut wird erst, wenn der Plan freigegeben ist.
+Planungsphase, siehe [docs/PLAN.md](docs/PLAN.md). Gebaut wird erst, wenn der Plan freigegeben ist.
