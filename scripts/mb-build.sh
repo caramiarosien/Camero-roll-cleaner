@@ -8,4 +8,4 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 rsync -a --delete --exclude .git --exclude build --exclude DerivedData --exclude xcuserdata "$ROOT/" "$HOST:$DEST/"
 ssh -o BatchMode=yes "$HOST" "cd ~/$DEST && xcodebuild -project Yolk.xcodeproj -scheme Yolk -configuration Debug \
   -destination 'generic/platform=iOS Simulator' -derivedDataPath build/DerivedData \
-  CODE_SIGNING_ALLOWED=NO build 2>&1 | grep -E 'error:|warning: .*\.swift|BUILD (SUCCEEDED|FAILED)|\*\* ' | head -80"
+  CODE_SIGNING_ALLOWED=NO build 2>&1 | grep -E 'error:|\.swift:[0-9]+:[0-9]+: warning:|BUILD (SUCCEEDED|FAILED)' | head -80"
