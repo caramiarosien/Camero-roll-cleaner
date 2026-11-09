@@ -8,3 +8,9 @@
 # Environment
 .env
 .env.*
+
+# Xcode
+xcuserdata/
+DerivedData/
+build/
+*.xcuserstate
