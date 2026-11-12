@@ -10,7 +10,7 @@ struct HomeView: View {
 
     @State private var preview: [MediaItem] = []
     @State private var remaining = 0
-    @State private var showTrash = false
+    @StateObject private var navigator = Navigator()
     /// Nur neu laden, wenn der Startbildschirm zu sehen ist, nicht bei jedem Wisch im Hintergrund.
     @State private var isVisible = false
 
@@ -18,7 +18,7 @@ struct HomeView: View {
         let trashCount = trashed.count
         let trashBytes = trashed.reduce(Int64(0)) { $0 + $1.byteSize }
 
-        NavigationStack {
+        NavigationStack(path: $navigator.path) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     BrandMark()
@@ -31,7 +31,7 @@ struct HomeView: View {
                         .padding(.top, 20)
 
                     if trashCount > 0 {
-                        Button { showTrash = true } label: { trashCard(count: trashCount, bytes: trashBytes) }
+                        Button { navigator.open(.trash) } label: { trashCard(count: trashCount, bytes: trashBytes) }
                             .buttonStyle(.plain)
                             .padding(.top, 10)
                     }
@@ -41,7 +41,7 @@ struct HomeView: View {
                         .padding(.bottom, 12)
 
                     LazyVGrid(columns: [GridItem(.flexible(), spacing: 14), GridItem(.flexible(), spacing: 14)], spacing: 20) {
-                        NavigationLink { SwipeView() } label: {
+                        NavigationLink(value: Route.swipe) {
                             ModeTile(title: "Alle Fotos", subtitle: "\(remaining.formatted()) übrig", items: preview)
                         }
                         .buttonStyle(.plain)
@@ -57,8 +57,13 @@ struct HomeView: View {
             }
             .background(Theme.background.ignoresSafeArea())
             .toolbar(.hidden, for: .navigationBar)
-            // Fest verankert, damit der Papierkorb offen bleibt, auch wenn er leer wird.
-            .navigationDestination(isPresented: $showTrash) { TrashView() }
+            // Einziges Navigationsziel der App. Der Papierkorb bleibt offen, auch wenn er leer wird.
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .swipe: SwipeView()
+                case .trash: TrashView()
+                }
+            }
             .onAppear {
                 isVisible = true
                 reload()
@@ -66,6 +71,10 @@ struct HomeView: View {
             .onDisappear { isVisible = false }
             .onChange(of: library.changeToken) { _, _ in if isVisible { reload() } }
         }
+        .environmentObject(navigator)
+        #if DEBUG
+        .task { DebugLaunch.apply(context: context, library: library, navigator: navigator) }
+        #endif
     }
 
     private func reload() {

@@ -7,12 +7,12 @@ struct SwipeView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject private var navigator: Navigator
     @StateObject private var session = SwipeSession(library: .shared)
     @Query(filter: #Predicate<Decision> { $0.kindRaw == "trash" }) private var trashed: [Decision]
 
     @State private var offset: CGSize = .zero
     @State private var isFlying = false
-    @State private var showTrash = false
     @State private var decisionTick = 0
 
     private let threshold: CGFloat = 110
@@ -36,7 +36,6 @@ struct SwipeView: View {
         .padding(.horizontal, 20)
         .background(Theme.background.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
-        .navigationDestination(isPresented: $showTrash) { TrashView() }
         .sensoryFeedback(.impact(weight: .medium), trigger: decisionTick)
         .onAppear {
             session.attach(context)
@@ -76,7 +75,7 @@ struct SwipeView: View {
 
             Spacer()
 
-            Button { showTrash = true } label: {
+            Button { navigator.open(.trash) } label: {
                 HStack(spacing: 5) {
                     Image(systemName: "trash").font(.system(size: 13, weight: .medium))
                     Text("\(trashed.count)").font(.system(size: 13, weight: .semibold)).monospacedDigit()
@@ -187,7 +186,7 @@ struct SwipeView: View {
                 .foregroundStyle(Theme.inkSecondary)
                 .multilineTextAlignment(.center)
             if !trashed.isEmpty {
-                Button("Zum Papierkorb") { showTrash = true }
+                Button("Zum Papierkorb") { navigator.open(.trash) }
                     .buttonStyle(PrimaryButtonStyle())
                     .padding(.horizontal, 30)
             }
